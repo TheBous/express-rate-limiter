@@ -1,6 +1,7 @@
 import express, { Request, Response, Application } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import routes from "./src/routes";
 
 //For env File 
 dotenv.config();
@@ -8,6 +9,7 @@ dotenv.config();
 const app: Application = express();
 
 app.use(express.json());
+app.use('/api', routes);
 
 mongoose.connect(process.env.MONGO_SERVER!);
 const database = mongoose.connection;
