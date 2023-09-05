@@ -1,6 +1,9 @@
 import express, { Request, Response, Application } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import redis from 'redis';
+import { createClient } from 'redis';
+
 import routes from "./src/routes";
 
 //For env File 
@@ -11,6 +14,7 @@ const app: Application = express();
 app.use(express.json());
 app.use('/api', routes);
 
+// Mongoose
 mongoose.connect(`${process.env.MONGO_SERVER}/${process.env.MONGO_DB_NAME}`);
 const database = mongoose.connection;
 
@@ -21,6 +25,11 @@ database.on('error', (error) => {
 database.once('connected', () => {
     console.info('Database Connected');
 })
+
+const client = createClient();
+client.connect();
+client.on('connect', () => console.info('Connected to redis successfully'));
+client.on('error', err => console.error('Redis Client Error', err));
 
 const port = process.env.PORT || 8000;
 
