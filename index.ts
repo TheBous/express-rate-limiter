@@ -1,10 +1,25 @@
-import express, { Express, Request, Response, Application } from 'express';
+import express, { Request, Response, Application } from 'express';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 //For env File 
 dotenv.config();
 
 const app: Application = express();
+
+app.use(express.json());
+
+mongoose.connect(process.env.MONGO_SERVER!);
+const database = mongoose.connection;
+
+database.on('error', (error) => {
+    console.error(error)
+})
+
+database.once('connected', () => {
+    console.info('Database Connected');
+})
+
 const port = process.env.PORT || 8000;
 
 app.get('/', (req: Request, res: Response) => {
@@ -12,5 +27,5 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is Fire at http://localhost:${port}`);
+    console.log(`Server is on fire at http://localhost:${port}`);
 });
