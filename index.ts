@@ -11,7 +11,7 @@ const app: Application = express();
 app.use(express.json());
 app.use('/api', routes);
 
-mongoose.connect(process.env.MONGO_SERVER!);
+mongoose.connect(`${process.env.MONGO_SERVER}/${process.env.MONGO_DB_NAME}`);
 const database = mongoose.connection;
 
 database.on('error', (error) => {
