@@ -5,6 +5,7 @@ import redis from 'redis';
 import { createClient } from 'redis';
 
 import routes from "./src/routes";
+import { RedisClientType } from '@redis/client';
 
 //For env File 
 dotenv.config();
@@ -26,10 +27,14 @@ database.once('connected', () => {
     console.info('Database Connected');
 })
 
-const client = createClient();
-client.connect();
-client.on('connect', () => console.info('Connected to redis successfully'));
-client.on('error', err => console.error('Redis Client Error', err));
+export let redisClient: RedisClientType;
+
+(async () => {
+    redisClient = createClient();
+    redisClient.on("error", (error) => console.error(`Error : ${error}`));
+    redisClient.on("connect", () => console.info(`Redis connected`));
+    await redisClient.connect();
+})();
 
 const port = process.env.PORT || 8000;
 

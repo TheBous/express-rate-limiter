@@ -14,8 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const APIKey_1 = __importDefault(require("../model/APIKey"));
+const rateLimiter_1 = __importDefault(require("../middleware/rateLimiter"));
 const router = express_1.default.Router();
-router.get('/get_api_keys', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/get_api_keys', (0, rateLimiter_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const apiKeys = yield APIKey_1.default.find();
     res.send(apiKeys);
 }));
